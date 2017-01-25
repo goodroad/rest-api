@@ -1,0 +1,3 @@
+select 100;
+
+INSERT INTO `report` VALUES (1,'성남판교','도로사고','고라니',37.552,126.986),(2,'남한산성입구','도로사고','멧돼지',37.4713,127.196),(3,'3',NULL,NULL,0,0),(4,'4',NULL,NULL,0,0),(5,'5',NULL,NULL,0,0),(6,'6',NULL,NULL,0,0),(7,'7',NULL,NULL,0,0),(8,'8',NULL,NULL,0,0),(9,'9',NULL,NULL,0,0),(10,'10',NULL,NULL,0,0),(11,'11',NULL,NULL,0,0),(12,'12',NULL,NULL,0,0),(13,'13',NULL,NULL,0,0),(14,'14',NULL,NULL,0,0),(15,'15',NULL,NULL,0,0),(16,'16',NULL,NULL,0,0);
