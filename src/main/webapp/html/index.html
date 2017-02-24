@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>굿로드</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css">
+    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/web/html/js/scrollspy.js"></script>
+</head>
+<body>
+<div id="wrap">
+    <div id="top_menu" class="fixed top-menu">
+        <div class="ui container">
+            <div id="menu-group" class="gui menu righted">
+                <a href="#page1" class="gui on menu-btn">굿로드 소개</a>
+                <a href="#page2" class="menu-btn">로드킬이란?</a>
+                <a href="#page3" class="menu-btn">로드킬 지표</a>
+            </div>
+        </div>
+    </div>
+    <div id="header_wrap" class="intro">
+        <div class="overlay"></div>
+        <div class="title-section">
+            Text
+        </div>
+    </div>
+    <div class="contents">
+        <div id="page1" class="content-section card ">
+            <div class="page-center">
+                awef
+            </div>
+        </div>
+        <div id="page2" class="content-section card2">
+            <div class="page-center">
+                awef
+            </div>
+        </div>
+        <div id="page3" class="content-section card3">
+            <div class="page-center">
+                awef
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="page-center">
+            aa
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#menu-group .menu-btn').on('click', function (event) {
+            event.preventDefault();
+            $('html, body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 300);
+        });
+        $('.content-section').scrollSpy();
+        $('.content-section').on('scrollSpy:enter', function() {
+            var t = $(this).attr('id');
+            $(".menu a").removeClass('on');
+            $("a[href='#" + t + "']").addClass('on');
+        });
+    });
+</script>
+</body>
+</html>
