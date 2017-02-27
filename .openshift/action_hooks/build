@@ -1,0 +1,3 @@
+export JAVA_HOME="/usr/lib/jvm/java-1.8.0/jre"
+export PATH=/usr/lib/jvm/java-1.8.0/bin:$PATH
+echo $PATH

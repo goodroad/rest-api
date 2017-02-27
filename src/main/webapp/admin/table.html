@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+    </script>
+</head>
+<script>
+
+    var page = getUrlParameter("page");
+    var search = getUrlParameter("search");
+    var name = getUrlParameter("p");
+    var visibleList = ["lat","lng","pos","road","pos","group1","group2","writeDate","status","writerType","file","address"];
+    var recentUrl = 'http://rest.goodroad.co.kr/api/reports?page='+page+'&size=100&sort=id,desc';
+    var searchGroup1 = 'http://rest.goodroad.co.kr/api/reports/search/group1?p='+name+'&page='+page+'&size=100&sort=id,desc';
+    var searchGroup2 = 'http://rest.goodroad.co.kr/api/reports/search/group2?p='+name+'&page='+page+'&size=100&sort=id,desc';
+    var searchDate = 'http://rest.goodroad.co.kr/api/reports/search/writeDate?p='+name+'&page='+page+'&size=100&sort=id,desc';
+    var searchWriterType = 'http://rest.goodroad.co.kr/api/reports/search/writerType?p='+name+'&page='+page+'&size=100&sort=id,desc';
+    var searchAddress = 'http://rest.goodroad.co.kr/api/reports/search/address?p='+name+'&page='+page+'&size=100&sort=id,desc';
+
+    var url = recentUrl;
+
+    if(search == "group1"){
+        url = searchGroup1;
+    }else if(search == "group2"){
+        url = searchGroup2;
+    }else if(search == "group1"){
+        url = searchGroup1;
+    }else if(search == "address"){
+        url = searchAddress;
+    }else if(search == "writeDate"){
+        url = searchDate;
+    }else if(search == "writerType"){
+        url = searchWriterType;
+    }
+
+
+    console.info(url);
+
+    jQuery.ajax({
+        type: 'GET',
+        url: url,
+        success: function(data) {
+            console.log(  data._embedded.reports); //returns all
+
+            var tbl_body = document.createElement("tbody");
+            var odd_even = false;
+            jQuery.each(data._embedded.reports, function() {
+                //console.info(this)
+                var tbl_row = tbl_body.insertRow();
+                tbl_row.className = odd_even ? "odd" : "even";
+                jQuery.each(this, function(k , v) {
+                    var cell = tbl_row.insertCell();
+//                    console.info(k)
+                    if(k == "_links"){
+                        var spiltList = v.self.href.split("/");
+                        var id =  jQuery(spiltList).last()[0];
+                        jQuery(cell).append("<a href='http://goodroad.co.kr/sample/map/map?id="+id+"'>map?id="+id+"</a>");
+                    }else if(visibleList.indexOf(k) > -1 ){
+
+                        if(k == "group1"){
+                            jQuery(cell).append("<a href='http://goodroad.co.kr/sample/page/table.html?search=group1&p="+v+"'>"+v+"</a>");
+
+                        }else if(k == "group2"){
+                            jQuery(cell).append("<a href='http://goodroad.co.kr/sample/page/table.html?search=group2&p="+v+"'>"+v+"</a>");
+
+                        }else if(k == "address"){
+                            jQuery(cell).append("<a href='http://goodroad.co.kr/sample/page/table.html?search=address&p="+v+"'>"+v+"</a>");
+
+                        }else if(k == "writeDate"){
+                            jQuery(cell).append("<a href='http://goodroad.co.kr/sample/page/table.html?search=writeDate&p="+v+"'>"+v+"</a>");
+
+                        }else if(k == "writerType"){
+                            jQuery(cell).append("<a href='http://goodroad.co.kr/sample/page/table.html?search=writerType&p="+v+"'>"+v+"</a>");
+
+                        }else{
+
+                            cell.appendChild(document.createTextNode(v));
+                        }
+
+
+                    }
+                })
+                odd_even = !odd_even;
+
+            })
+//            console.info(tbl_body);
+
+            jQuery('#t').append(tbl_body);
+        }
+    });
+
+
+
+
+
+</script>
+<body>
+
+<table id="t" border="1"></table>
+</body>
+</html>
