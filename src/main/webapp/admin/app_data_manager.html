@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>앱 정보 관리</title>
+  <link rel="stylesheet" type="text/css" href="semantic/semantic.css"/>
+  <link rel="stylesheet" type="text/css" href="css/dataTable.css"/>
+  <style>
+    .align-center{
+      text-align: center !important;
+    }
+
+    table thead th{
+      text-align: center !important;
+    }
+  </style>
+</head>
+<body>
+
+
+<div id="wrap">
+  <div class="ui modal" style="width: 40%; height: 40%;">
+    <i class="close icon"></i>
+    <div class="header">
+      사진
+    </div>
+    <div class="image content">
+      <div class="ui image">
+        <img id="dataImg" src=""/>
+      </div>
+    </div>
+  </div>
+
+  <div id="top_menu" class="fixed top-menu">
+    <div class="ui secondary pointing menu">
+      <a class="active item" href="#">앱정보 관리</a>
+    </div>
+  </div>
+
+  <div class="contents" style="margin-top: 60px;">
+    <div style="text-align: right;">
+      <button id="deleteBtn" class="ui button">삭제</button>
+    </div>
+
+    <div class="ui segment">
+      <table id="list" class="ui celled table paginated">
+        <thead>
+        <tr>
+          <th id="checkHeader">선택</th>
+          <th>카테고리</th>
+          <th>동물종류</th>
+          <th>위치</th>
+          <th>사진주소(클릭하여 보기)</th>
+          <th>기록일시</th>
+          <th>생성일시</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="semantic/semantic.js"></script>
+<script src="js/dataTable.js"></script>
+<script>
+  $(function(){
+    $('#deleteBtn').click(function(){
+      deleteData();
+    });
+
+    $('#checkHeader').click(function(){
+      if($('.checkbox').data('b')){
+        $('.checkbox').attr('checked', false).data('b', false);
+      }else{
+        $('.checkbox').attr('checked', true).data('b', true);
+      }
+    });
+
+    $(document).on('click', '.viewImage', function () {
+      var imgUrl = $(this).text();
+
+      if(imgUrl != '' && imgUrl != 'null'){
+        $('#dataImg').attr('src', imgUrl);
+        $('.ui.modal').modal('show');
+      }
+    });
+
+    $.get('http://rest.goodroad.co.kr/api/reports?page=0&size=1000&sort=id,desc', '', function (data) {
+      var html = '';
+      $.each(data._embedded.reports, function(idx, item){
+        //console.log(item._links.self.href);
+
+        html = '';
+        html += '<tr>';
+        html += ' <td class="align-center"><input type="checkbox" class="checkbox" value="' + item._links.self.href + '"/></td>';
+        html += ' <td>' + item.group1 + '</td>';
+        html += ' <td>' + item.group2 + '</td>';
+        html += ' <td>' + item.address + '</td>';
+        html += ' <td class="viewImage">' + item.file + '</td>';
+        html += ' <td>' + dateFormat(item.writeDate) + '</td>';
+        html += ' <td>' + dateFormat(item.createdDate)+ '</td>';
+        html += '</tr>';
+        $('#list tbody').append(html);
+      });
+
+      $('#list').dataTable({
+         paging: true,
+         lengthChange: true,
+         ordering: false,
+         autoWidth: false,
+         pageLength: 10,
+         info: false,
+         searching: true
+       });
+    });
+  });
+
+  function dateFormat(textDate) {
+      if(textDate != null) {
+          return textDate.substr(0, 4) + '-' + textDate.substr(4, 2) + '-' + textDate.substr(6, 2);
+      }else{
+          return textDate;
+      }
+  }
+
+  function deleteData() {
+    if(confirm('선택된 항목을 삭제하시겠습니까?')){
+      $('.checkbox').each(function(){
+        if(this.checked){
+          $.ajax({
+             url: this.value,
+             dataType: 'json',
+             type: 'DELETE',
+             success: function () {
+               location.reload();
+             }
+           });
+        }
+      });
+    }
+  }
+</script>
+
+
+</body>
+</html>
