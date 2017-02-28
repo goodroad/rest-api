@@ -29,20 +29,20 @@ public interface ReportRepository extends PagingAndSortingRepository<Report, Lon
     Page findByGroup1StartingWith(@Param("p") String name, Pageable p);
 
     @RestResource(path = "group1year")
-    List<Report> findByGroup1StartingWithAndWriteDateContaining(@Param("p") String name, @Param("year") String year );
+    List<Report> findByGroup1StartingWithAndWriteDateStartingWith(@Param("p") String name, @Param("year") String year );
 
     @RestResource(path = "writeDate")
-    Page findByWriteDateContaining(@Param("p") String name, Pageable p);
+    Page findByWriteDateStartingWith(@Param("p") String name, Pageable p);
 
     @RestResource(path = "year")
-    List<Report> findByWriteDateContaining(@Param("p") String name);
+    List<Report> findByWriteDateStartingWith(@Param("p") String name);
 
     @RestResource(path = "address")
     Page findByAddressContaining(@Param("p") String name, Pageable p);
 
 
     @RestResource(path = "addressyear")
-    Page findByAddressContainingAndWriteDateContaining(@Param("p") String name, @Param("year") String year, Pageable p);
+    Page findByAddressContainingAndWriteDateStartingWith(@Param("p") String name, @Param("year") String year, Pageable p);
 
 
 
@@ -54,7 +54,7 @@ public interface ReportRepository extends PagingAndSortingRepository<Report, Lon
     Page findByWriterType(@Param("p")  Report.WriterType name, Pageable p);
 
     @Override
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     void delete(Long aLong);
 
     @Override
