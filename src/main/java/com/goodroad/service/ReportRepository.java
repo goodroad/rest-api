@@ -1,6 +1,8 @@
 package com.goodroad.service;
 
 import com.goodroad.model.Report;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,15 +14,12 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by dubu on 2017-01-23.
  */
+@CacheConfig(cacheNames = "report")
 public interface ReportRepository extends PagingAndSortingRepository<Report, Long>, JpaRepository<Report, Long>,JpaSpecificationExecutor<Report> {
-
-//    @RestResource(path = "group2")
-//    List<Report> findByGroup2StartingWith(@Param("p") String name);
 
     @RestResource(path = "group2")
     Page findByGroup2StartingWith(@Param("p") String name, Pageable p);
@@ -29,11 +28,13 @@ public interface ReportRepository extends PagingAndSortingRepository<Report, Lon
     Page findByGroup1StartingWith(@Param("p") String name, Pageable p);
 
     @RestResource(path = "group1year")
+    @Cacheable
     List<Report> findByGroup1StartingWithAndWriteDateStartingWith(@Param("p") String name, @Param("year") String year );
 
     @RestResource(path = "writeDate")
     Page findByWriteDateStartingWith(@Param("p") String name, Pageable p);
 
+    @Cacheable
     @RestResource(path = "year")
     List<Report> findByWriteDateStartingWith(@Param("p") String name);
 
@@ -72,6 +73,7 @@ public interface ReportRepository extends PagingAndSortingRepository<Report, Lon
     List findByGroup2Rank();
 
 
+    @Cacheable
     @Query(value = "select group1, count(group1)\n" +
             "from report\n" +
             "where write_date like %?1% \n" +
