@@ -73,7 +73,6 @@ public interface ReportRepository extends PagingAndSortingRepository<Report, Lon
     List findByGroup2Rank();
 
 
-    @Cacheable
     @Query(value = "select group1, count(group1)\n" +
             "from report\n" +
             "where write_date like %?1% \n" +
