@@ -81,7 +81,7 @@
     });
 
     $(document).on('click', '.viewImage', function () {
-      var imgUrl = $(this).text();
+      var imgUrl = 'http://rest.goodroad.co.kr/files/'+$(this).text();
 
       if(imgUrl != '' && imgUrl != 'null'){
         $('#dataImg').attr('src', imgUrl);
@@ -97,12 +97,12 @@
         html = '';
         html += '<tr>';
         html += ' <td class="align-center"><input type="checkbox" class="checkbox" value="' + item._links.self.href + '"/></td>';
-        html += ' <td>' + item.group1 + '</td>';
-        html += ' <td>' + item.group2 + '</td>';
-        html += ' <td>' + item.address + '</td>';
+        html += ' <td class="group1">' + item.group1 + '</td>';
+        html += ' <td class="group2">' + item.group2 + '</td>';
+        html += ' <td class="address">' + item.address + '</td>';
         html += ' <td class="viewImage">' + item.file + '</td>';
-        html += ' <td>' + dateFormat(item.writeDate) + '</td>';
-        html += ' <td>' + dateFormat(item.createdDate)+ '</td>';
+        html += ' <td>' + item.writeDate + '</td>';
+        html += ' <td>' + item.createdDate+ '</td>';
         html += '</tr>';
         $('#list tbody').append(html);
       });
@@ -118,6 +118,21 @@
        });
     });
   });
+
+  var getUrlParameter = function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+          sURLVariables = sPageURL.split('&'),
+          sParameterName,
+          i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split('=');
+
+          if (sParameterName[0] === sParam) {
+              return sParameterName[1] === undefined ? true : sParameterName[1];
+          }
+      }
+  };
 
   function dateFormat(textDate) {
       if(textDate != null) {

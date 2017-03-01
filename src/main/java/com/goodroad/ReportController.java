@@ -30,9 +30,10 @@ public class ReportController {
     @ResponseBody
     ResponseEntity saveReport(@RequestBody Report report) {
 
-        String yyyyMMdd = DateTime.now().toString(DateTimeFormat.forPattern("yyyyMMdd"));
+        String yyyyMMdd = DateTime.now().toString(DateTimeFormat.forPattern("yyyyMMddHHmmss"));
         report.address = findAddress(report);
         report.modifiedDate = yyyyMMdd;
+        report.writerType = Report.WriterType.GOODROAD;
 
         if(report.createdDate == null){
             report.createdDate =  yyyyMMdd;
