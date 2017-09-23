@@ -2,6 +2,7 @@ package com.goodroad.service;
 
 import com.goodroad.model.Report;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,13 +29,12 @@ public interface ReportRepository extends PagingAndSortingRepository<Report, Lon
     Page findByGroup1StartingWith(@Param("p") String name, Pageable p);
 
     @RestResource(path = "group1year")
-    @Cacheable
     List<Report> findByGroup1StartingWithAndWriteDateStartingWith(@Param("p") String name, @Param("year") String year );
 
     @RestResource(path = "writeDate")
     Page findByWriteDateStartingWith(@Param("p") String name, Pageable p);
 
-    @Cacheable
+    @Cacheable(value = "year")
     @RestResource(path = "year")
     List<Report> findByWriteDateStartingWith(@Param("p") String name);
 
@@ -56,9 +56,11 @@ public interface ReportRepository extends PagingAndSortingRepository<Report, Lon
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CacheEvict(value = "year",allEntries = true)
     void delete(Long aLong);
 
     @Override
+    @CacheEvict(value = "year",allEntries = true)
     Report save(Report s);
 
 
